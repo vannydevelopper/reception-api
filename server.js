@@ -6,6 +6,7 @@ const fileUpload = require("express-fileupload");
 const bindUser = require("./middleware/bindUser");
 
 const userRouter = require("./routes/userRouter")
+const partenaireRouter = require("./routes/partenaireRouter")
 
 
 const app = express();
@@ -20,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.all("*", bindUser);
 app.use("/users",userRouter)
+app.use("/patenaire",partenaireRouter)
+
 
 
 const port = process.env.PORT || 8000;

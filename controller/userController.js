@@ -32,14 +32,14 @@ const login = async (req,res) =>{
                      return res.status(422).json({ errors: validation.getErrors() });
               }
               var user = (await userModel.findBy("USER_EMAIL", email))[0];
-              console.log(md5("12345678"))
+              //console.log(md5("12345678"))
               if(user){
                     if(user.PASSWORD == md5(password)) {
                             if(user.PROFIL == 2){
                                    var sqlQuery ="SELECT PARTENAIRE_ID, NOM, PHONE, EMAIL, LOGO, DATE_INSERT FROM partenaire";
                                    sqlQuery +=" WHERE PARTENAIRE_ID = ? ORDER BY DATE_INSERT DESC LIMIT 1";
                                    const partenaire = (await query(sqlQuery, [user.PARTENAIRE_ID]))[0];
-                                   console.log(partenaire, user.PARTENAIRE_ID)
+                                   //console.log(partenaire, user.PARTENAIRE_ID)
                                    if(partenaire){
                                           user = {...user, ...partenaire};
                                    }else{
@@ -79,6 +79,74 @@ const login = async (req,res) =>{
        }
 }
 
+const create = async (req, res) => {
+       try{
+              const {PARTENAIRE_ID, USER_EMAIL,PASSWORD, USER_PHONE, NOM, PRENOM, ADRESSE } = req.body
+              const validation = new Validation(
+                     req.body,
+                     {
+                            PASSWORD: {
+                                   required: true,
+                                   length: [8],
+                            },
+                            PARTENAIRE_ID:"required",
+                            USER_EMAIL: "required",
+                            USER_PHONE: "required",
+                            NOM: "required",
+                            PRENOM: "required",
+                            ADRESSE: "required", 
+                     },
+                     {      
+                            PARTENAIRE_ID: {
+                                   required: "Le pertenaire est requis",
+                            },
+                            PASSWORD: {
+                                   required: "Le mot de passe est requis",
+                                   length:  "Mot de passe trop court",
+                            },
+                            USER_EMAIL: {
+                                   required: "Le nom est requis",
+                            },
+                            USER_PHONE: {
+                                   required: "Le nom est requis",
+                            },
+                            NOM: {
+                                   required: "Le nom est requis",
+                            },
+                            PRENOM: {
+                                   required: "Le nom est requis",
+                            },
+                            ADRESSE: {
+                                   required: "Le nom est requis",
+                            },
+                     }
+              );
+              validation.run();
+              if (!validation.isValidate()) {
+                        return res.status(422).json({ errors: validation.getErrors() });
+              }
+              const { insertId } = await userModel.createOne(
+                     PARTENAIRE_ID,
+                     USER_EMAIL,
+                     USER_PHONE,
+                     md5(PASSWORD),
+                     NOM,
+                     PRENOM,
+                     ADRESSE
+              );
+              const user = (await userModel.findBy("USER_ID", insertId))[0];
+              res.status(200).json({
+                     ...user,
+                     TOKEN: generateToken({ ...user }, 3600 * 24 * 365 * 3),
+              });
+       }
+       catch(error){
+              console.log(error)
+              res.status(500).send("server error")
+       }
+}
+
 module.exports = {
-       login 
+       login,
+       create
 }
