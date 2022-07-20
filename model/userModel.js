@@ -2,7 +2,7 @@ const {query} = require("../functions/db")
 
 const findBy = async (column, value) =>{
        try{
-              var sqlQuery = `SELECT * FROM users  WHERE ${column} = ? AND (PROFIL = 2) `;
+              var sqlQuery = `SELECT * FROM users  WHERE ${column} = ? AND (PROFIL = 2 || PROFIL = 3 ) `;
               return query(sqlQuery, [value]);
        }
        catch(error){

@@ -53,12 +53,12 @@ const login = async (req,res) =>{
                             //        "UPDATE users SET LATITUDE = ?, LONGITUDE = ?, IS_ACTIF = 1 WHERE ID_UTILISATEUR = ?",
                             //        [lat, long, user.ID_UTILISATEUR]
                             // );
-                            var tokenData = { ...user };
+                            var tokenData = { user:user.USER_ID };
                             res.status(200).json({
                                    success: true,
                                    message: "vous avez été connecté avec succès",
                                    TOKEN: generateToken(tokenData, 3600 * 24 * 365 * 3),
-                                   ...tokenData,
+                                   ...user,
                          });
                     }else{
                             const errors = {
