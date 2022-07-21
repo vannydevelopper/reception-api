@@ -82,6 +82,16 @@ const login = async (req,res) =>{
 const create = async (req, res) => {
        try{
               const {PARTENAIRE_ID, USER_EMAIL,PASSWORD, USER_PHONE, NOM, PRENOM, ADRESSE } = req.body
+              var errors = {}
+              const existEmail = (
+                     await query ("SELECT * FROM users WHERE USER_EMAIL = ?",
+                     [USER_EMAIL])
+              ) [0];
+
+              const existNumero = (
+                     await query("SELECT * FROM users WHERE USER_PHONE = ?",
+                     [USER_PHONE])
+              )[0];
               const validation = new Validation(
                      req.body,
                      {
@@ -122,6 +132,18 @@ const create = async (req, res) => {
                      }
               );
               validation.run();
+
+              if (existEmail)
+              validation.setError(
+                     "USER_EMAIL",
+                     "Le même email existe déjà"
+              );
+
+              if(existNumero) validation.setError(
+                     "USER_PHONE",
+                     "Le même numero existe déjà"
+              )
+
               if (!validation.isValidate()) {
                         return res.status(422).json({ errors: validation.getErrors() });
               }
@@ -135,9 +157,10 @@ const create = async (req, res) => {
                      ADRESSE
               );
               const user = (await userModel.findBy("USER_ID", insertId))[0];
+              var tokenData = { user:user.USER_ID };
               res.status(200).json({
                      ...user,
-                     TOKEN: generateToken({ ...user }, 3600 * 24 * 365 * 3),
+                     TOKEN: generateToken(tokenData, 3600 * 24 * 365 * 3),
               });
        }
        catch(error){
