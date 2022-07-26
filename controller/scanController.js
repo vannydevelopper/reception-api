@@ -3,7 +3,7 @@ const scanModel = require("../model/scanModel")
 
 const create = async (req, res) => {
        try{
-              const {PATH} = req.body
+              const {PATH, EVENEMENT_ID} = req.body
               const validation = new Validation(req.body)
               validation.run();
               if (!validation.isValidate()) {
@@ -12,6 +12,7 @@ const create = async (req, res) => {
               const { insertId } = await scanModel.createOne(
                      req.userId,
                      PATH,
+                     EVENEMENT_ID
               );
               const user = (await scanModel.findById("ID_USERS_SCAN", insertId))[0];
               res.status(200).json({
