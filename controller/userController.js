@@ -81,7 +81,7 @@ const login = async (req,res) =>{
 
 const create = async (req, res) => {
        try{
-              const {PARTENAIRE_ID, USER_EMAIL,PASSWORD, USER_PHONE, NOM, PRENOM, ADRESSE } = req.body
+              const {PARTENAIRE_ID, USER_EMAIL,PASSWORD, USER_PHONE, NOM, PRENOM, ADRESSE, SEXE } = req.body
               var errors = {}
               const existEmail = (
                      await query ("SELECT * FROM users WHERE USER_EMAIL = ?",
@@ -104,7 +104,7 @@ const create = async (req, res) => {
                             USER_PHONE: "required",
                             NOM: "required",
                             PRENOM: "required",
-                            ADRESSE: "required", 
+                            ADRESSE: "required",
                      },
                      {      
                             PARTENAIRE_ID: {
@@ -154,7 +154,8 @@ const create = async (req, res) => {
                      md5(PASSWORD),
                      NOM,
                      PRENOM,
-                     ADRESSE
+                     ADRESSE,
+                     SEXE
               );
               const user = (await userModel.findBy("USER_ID", insertId))[0];
               var tokenData = { user:user.USER_ID };

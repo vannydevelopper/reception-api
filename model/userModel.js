@@ -17,12 +17,13 @@ const createOne = async (
        PASSWORD,
        NOM,
        PRENOM,
-       ADRESSE
+       ADRESSE,
+       SEXE = null
 ) => {
        try{
               return query(
-                     "INSERT INTO users(PARTENAIRE_ID,PROFIL, USER_EMAIL, USER_PHONE, PASSWORD, NOM, PRENOM, ADRESSE) VALUES(?,?, ?, ?, ?, ?, ?, ?)",
-                     [PARTENAIRE_ID, 3, USER_EMAIL, USER_PHONE, PASSWORD, NOM, PRENOM, ADRESSE]
+                     "INSERT INTO users(PARTENAIRE_ID,PROFIL, USER_EMAIL, USER_PHONE, PASSWORD, NOM, PRENOM, ADRESSE, SEXE) VALUES(?,?, ?, ?, ?, ?, ?,?, ?)",
+                     [PARTENAIRE_ID, 3, USER_EMAIL, USER_PHONE, PASSWORD, NOM, PRENOM, ADRESSE, SEXE]
               );
        }
        catch(error){
