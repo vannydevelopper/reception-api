@@ -7,6 +7,7 @@ const userModel = require("../model/userModel")
 const login = async (req,res) =>{
        try{
               const{email, password}=req.body
+              //console.log(md5(2))
               const validation = new Validation(
                      req.body,
                      {

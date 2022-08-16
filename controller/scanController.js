@@ -4,6 +4,7 @@ const scanModel = require("../model/scanModel")
 const create = async (req, res) => {
        try{
               const {PATH, EVENEMENT_ID} = req.body
+              console.log(EVENEMENT_ID)
               const validation = new Validation(req.body)
               validation.run();
               if (!validation.isValidate()) {
@@ -11,8 +12,8 @@ const create = async (req, res) => {
                }
 
               const  idEvenement = (await scanModel.findEvenementId(EVENEMENT_ID))[0];
-
-              //console.log(idEvenement.EVENEMENT_ID)
+               //console.log(idEvenement)
+              // console.log(idEvenement.EVENEMENT_ID)
               if(!idEvenement == '') {
                      var evenementId= idEvenement.EVENEMENT_ID
                      const { insertId } = await scanModel.createOne(
@@ -26,7 +27,7 @@ const create = async (req, res) => {
                      });
 
                      //const user = (await scanModel.findById("ID_USERS_SCAN", insertId))[0];
-                     console.log(req.userId +" "+ PATH +" "+evenementId)
+                     //console.log(req.userId +" "+ PATH +" "+evenementId)
 
               }
               else{

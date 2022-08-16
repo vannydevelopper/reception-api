@@ -25,7 +25,8 @@ const createOne = (userId, PATH, evenementId) =>{
 
 const findEvenementId =async (id) => {
        try{
-              return query(`SELECT EVENEMENT_ID FROM evenement_evenement WHERE  md5(EVENEMENT_ID) = ?`,[id]
+              // return query(`SELECT EVENEMENT_ID FROM evenement_evenement WHERE  md5(EVENEMENT_ID) = ?`,[id]
+              return query(`SELECT EVENEMENT_ID FROM evenement_evenement WHERE  EVENEMENT_ID = ?`,[id]
               );
        }
        catch(error){
