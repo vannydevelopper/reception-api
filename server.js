@@ -6,9 +6,7 @@ const fileUpload = require("express-fileupload");
 const bindUser = require("./middleware/bindUser");
 
 const userRouter = require("./routes/userRouter")
-const partenaireRouter = require("./routes/partenaireRouter")
-const scanRouter = require("./routes/scanRouter")
-const historiqueRouter = require("./routes/historiqueRouter")
+const jsonRouter = require("./routes/jsonRouter")
 
 
 const app = express();
@@ -23,13 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 
 app.all("*", bindUser);
 app.use("/users",userRouter)
-app.use("/patenaire",partenaireRouter)
-app.use("/scan",scanRouter)
-app.use("/historique",historiqueRouter)
+app.use("/document", jsonRouter)
 
 
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 3000;
 
 app.listen(port, async () => {
   console.log("server is running on port: " + port);
